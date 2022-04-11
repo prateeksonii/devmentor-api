@@ -53,3 +53,25 @@ exports.getProjects = async (req, res, next) => {
     return next(err);
   }
 };
+
+exports.getProjectByCode = async (req, res, next) => {
+  try {
+    console.log('here');
+    const { code } = req.params;
+    console.log(code);
+
+    const project = await db.project.findUnique({ where: { code } });
+
+    if (!project) {
+      res.status(404);
+      throw new Error("Project doesn't exist");
+    }
+
+    return res.json({
+      ok: true,
+      project,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
